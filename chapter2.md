@@ -1,7 +1,7 @@
-# The Servlet Interface
+# Servlet接口
 
-## 2.1 Request Handling Methods
+## 2.1 请求处理方法
 
-## 2.2 Number of Instances
+## 2.2 实例数
 
-## 2.3 Servlet Life Cycle
+## 2.3 Servlet生命周期

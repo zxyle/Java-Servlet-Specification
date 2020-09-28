@@ -1,13 +1,50 @@
-# Overview
+# 总览
 
-## 1.1 What is a Servlet?
+## 1.1 什么是Servlet？
 
-## 1.2 What is a Servlet Container?
+Servlet是基于Java™技术的Web组件，由容器管理，可生成动态内容。 与其他基于Java技术的组件一样，servlet是独立于平台的Java类，它们被编译为与平台无关的字节码，可以将其动态加载到支持Java技术的Web服务器中并由其运行。 容器（有时称为Servlet引擎）是提供Servlet功能的Web服务器扩展。 Servlet通过Servlet容器实现的请求/响应范例与Web客户端进行交互。
 
-## 1.3 An Example
+## 1.2 什么是Servlet容器？
 
-## 1.4 Comparing Servlets with Other Technologies
+Servlet容器是Web服务器或应用程序服务器的一部分，该Web服务器或应用程序服务器提供通过其发送请求和响应的网络服务，解码基于MIME的请求并格式化基于MIME的响应。 servlet容器还包含和管理servlet的整个生命周期。
 
-## 1.5 Relationship to Java Platform, Enterprise Edition
+Servlet容器可以内置到主机Web服务器中，也可以通过该服务器的本机扩展API作为Web服务器的附加组件安装。 Servlet容器也可以内置到或可能安装到启用Web的应用程序服务器中。
 
-## 1.6 Compatibility with Java Servlet Specification Version 2.5
+所有servlet容器都必须支持HTTP作为请求和响应的协议，但是可能支持其他基于请求/响应的协议，例如HTTPS（基于SSL的HTTP）。 容器必须实现的HTTP规范的必需版本是HTTP/1.1和HTTP/2。 当支持HTTP/2时，servlet容器必须支持“ h2”和“ h2c”协议标识符（如HTTP/2 RFC第3.1节所指定）。 这意味着所有servlet容器都必须支持ALPN。 因为容器可能具有RFC 7234（HTTP/1.1缓存）中描述的缓存机制，所以它可以在将客户端的请求传递给Servlet之前修改来自客户端的请求，可以在将其发送给客户端之前修改Servlet产生的响应，或者可以响应请求，而无需按照RFC 7234将其交付给servlet。
+
+Servlet容器可能会对执行Servlet的环境施加安全限制。 在Java平台标准版（J2SE，v.1.3或更高版本）或Java平台企业版（Java EE，v.1.3或更高版本）环境中，应使用Java平台定义的权限体系结构来放置这些限制。 例如，某些应用程序服务器可能会限制Thread对象的创建，以确保不会对容器的其他组件产生负面影响。
+
+Java SE 8是必须用来构建servlet容器的基础Java平台的最低版本。
+
+## 1.3 一个例子
+
+以下是典型的事件序列：
+
+1.客户端（例如，Web浏览器）访问Web服务器并发出HTTP请求。
+
+2.该请求由Web服务器接收，并移交给Servlet容器。 Servlet容器可以在与主机Web服务器相同的进程中运行，可以在同一主机上的不同进程中运行，也可以在与其处理请求的Web服务器不同的主机上运行。
+
+3. servlet容器根据其servlet的配置确定要调用的servlet，并使用代表请求和响应的对象对其进行调用。
+4. Servlet使用请求对象来查找远程用户是谁，作为该请求的一部分可能发送了哪些HTTP POST参数以及其他相关数据。 Servlet执行其编程时所用的任何逻辑，并生成数据发送回客户端。 它通过响应对象将此数据发送回客户端。
+5. servlet完成请求处理后，servlet容器将确保正确刷新响应，并将控制权返回给主机Web服务器。
+
+## 1.4 Servlet与其他技术的比较
+
+在功能上，servlet提供比公共网关接口（CGI）程序更高的抽象级别，但比Web框架（例如JavaServer Faces）提供的抽象级别低。
+
+与其他服务器扩展机制相比，Servlet具有以下优点：
+
+■它们通常比CGI脚本快得多，因为使用了不同的进程模型。
+■他们使用许多Web服务器支持的标准API。
+■它们具有Java编程语言的所有优点，包括易于开发和平台独立性。
+■他们可以访问Java平台可用的大量API。
+
+## 1.5 与Java平台企业版的关系
+
+Java Servlet API v.4.0是Java平台企业版81的必需API。部署在其中的Servlet容器和Servlet必须满足Java EE规范中描述的在Java EE环境中执行的其他要求。
+
+## 1.6 与Java Servlet规范版本2.5的兼容性
+
+### 1.6.1处理注解
+
+在Servlet 2.5中，完成元数据仅影响部署时注释的扫描。 Web片段的概念在Servlet 2.5中不存在。 但是，在Servlet 3.0及更高版本中，元数据完整会影响在部署时扫描所有指定部署信息和Web片段的注释。 描述符的版本务必不影响容器在Web应用程序中扫描的注释。 规范的特定版本的实现必须扫描该配置中支持的所有注释，除非指定了元数据完整。
